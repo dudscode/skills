@@ -1,0 +1,8 @@
+name: validate
+version: 1.0.0
+description: habilidade para validar informações, desde identidade a compliance
+author: dudscode
+dependencies:
+  apm: []
+  mcp: []
+scripts: {}
