@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Skills — Guia Completo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0f;
+    --surface: #131318;
+    --surface2: #1a1a22;
+    --surface3: #212130;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+    --faint: #3a3a55;
+    --accent: #7c6aff;
+    --accent2: #a855f7;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --teal: #2dd4bf;
+    --pink: #f472b6;
+    --code-bg: #0a0a12;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 60px 40px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+  header::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,106,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.05;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 520px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  /* ── CHIPS NAVIGATION ── */
+  .chips-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(12,12,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+  }
+  .chips-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 6px;
+    padding: 14px 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chips-inner::-webkit-scrollbar { display: none; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+  .chip:hover { border-color: var(--border2); color: var(--text); }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    margin-bottom: 80px;
+    scroll-margin-top: 80px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--faint);
+    letter-spacing: 0.05em;
+  }
+  h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    main, header { padding-left: 20px; padding-right: 20px; }
+    .chips-wrapper { padding: 0 20px; }
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.65;
+    font-weight: 400;
+  }
+  .card-accent { border-color: rgba(124,106,255,0.3); background: rgba(124,106,255,0.05); }
+  .card-green  { border-color: rgba(52,211,153,0.25); background: rgba(52,211,153,0.04); }
+  .card-amber  { border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.04); }
+  .card-red    { border-color: rgba(248,113,113,0.25); background: rgba(248,113,113,0.04); }
+  .card-blue   { border-color: rgba(96,165,250,0.25); background: rgba(96,165,250,0.04); }
+  .card-teal   { border-color: rgba(45,212,191,0.25); background: rgba(45,212,191,0.04); }
+  .card-pink   { border-color: rgba(244,114,182,0.25); background: rgba(244,114,182,0.04); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 100px;
+  }
+  .badge-do    { background: rgba(52,211,153,0.15); color: var(--green); }
+  .badge-dont  { background: rgba(248,113,113,0.15); color: var(--red); }
+  .badge-tip   { background: rgba(96,165,250,0.15); color: var(--blue); }
+  .badge-warn  { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .badge-level { background: rgba(124,106,255,0.15); color: var(--accent); }
+
+  /* ── CODE ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #c8c8e8;
+    margin: 16px 0;
+  }
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    background: rgba(124,106,255,0.12);
+    color: #b8a8ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  .comment { color: var(--faint); font-style: italic; }
+  .key { color: #7c6aff; }
+  .str { color: #34d399; }
+  .kw  { color: #f472b6; }
+  .num { color: #fbbf24; }
+  .fn  { color: #60a5fa; }
+
+  /* ── ANATOMY BOX ── */
+  .anatomy {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .anatomy-header {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  /* ── LEVELS ── */
+  .levels { display: flex; flex-direction: column; gap: 0; }
+  .level {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .level:last-child { border-bottom: none; }
+  .level:hover { background: rgba(255,255,255,0.02); }
+  .level-bar {
+    width: 4px;
+    flex-shrink: 0;
+    border-radius: 0;
+  }
+  .level-content { padding: 16px 20px; flex: 1; }
+  .level-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .level-desc { font-size: 13px; color: var(--muted); }
+
+  /* ── COMPARISON ── */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .compare-col { padding: 20px 24px; }
+  .compare-col:first-child { border-right: 1px solid var(--border); }
+  .compare-col h3 { margin-bottom: 14px; }
+  .compare-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .compare-item::before {
+    content: '';
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .compare-do .compare-item::before   { background: rgba(52,211,153,0.2); border: 1.5px solid var(--green); }
+  .compare-dont .compare-item::before { background: rgba(248,113,113,0.2); border: 1.5px solid var(--red); }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  /* ── RULE ── */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    background: rgba(124,106,255,0.06);
+    border-radius: 0 12px 12px 0;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 20px 0;
+  }
+  .highlight strong { color: var(--text); }
+
+  /* ── TOKEN BAR ── */
+  .token-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .token-label { font-size: 13px; color: var(--muted); width: 140px; flex-shrink: 0; }
+  .token-track {
+    flex: 1;
+    height: 6px;
+    background: var(--surface3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .token-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .token-val { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); width: 70px; text-align: right; }
+
+  /* ── STRUCTURE TREE ── */
+  .tree {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 2;
+    color: var(--muted);
+  }
+  .tree .folder { color: var(--accent); }
+  .tree .file   { color: var(--text); }
+  .tree .ann    { color: var(--faint); font-style: italic; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── EXAMPLE SKILL ── */
+  .skill-example {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  .skill-example-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .skill-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .skill-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .skill-tab {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+  .skill-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .skill-tab-content { display: none; }
+  .skill-tab-content.active { display: block; }
+
+  /* ── DO / DONT PILL ── */
+  .pill-row {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .pill {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .pill-do   { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.2); }
+  .pill-dont { background: rgba(248,113,113,0.12); color: var(--red);   border: 1px solid rgba(248,113,113,0.2); }
+
+  /* ── LOOP STEPS ── */
+  .loop { display: flex; flex-direction: column; gap: 0; position: relative; }
+  .loop::before {
+    content: '';
+    position: absolute;
+    left: 19px; top: 20px; bottom: 20px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--teal));
+    opacity: 0.3;
+  }
+  .loop-step {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    position: relative;
+  }
+  .loop-num {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .loop-body { padding-top: 8px; }
+  .loop-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .loop-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── GOTCHA ── */
+  .gotcha-list { list-style: none; }
+  .gotcha-list li {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .gotcha-list li:last-child { border-bottom: none; }
+  .gotcha-icon { color: var(--amber); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .gotcha-text strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 13px; }
+  .gotcha-text span { color: var(--muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--faint);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Referência completa</div>
+  <h1>Agent <em>Skills</em><br>Guia Definitivo</h1>
+  <p class="subtitle">Tudo que você precisa saber para criar skills excelentes — estrutura, boas práticas, tokens, scripts e exemplos reais.</p>
+</header>
+
+<!-- CHIPS NAV -->
+<div class="chips-wrapper">
+  <div class="chips-inner">
+    <a class="chip active" href="#estrutura">
+      <span class="chip-dot" style="background:#7c6aff"></span>Estrutura
+    </a>
+    <a class="chip" href="#description">
+      <span class="chip-dot" style="background:#f472b6"></span>Description
+    </a>
+    <a class="chip" href="#tokens">
+      <span class="chip-dot" style="background:#fbbf24"></span>Tokens
+    </a>
+    <a class="chip" href="#escrita">
+      <span class="chip-dot" style="background:#34d399"></span>Escrita
+    </a>
+    <a class="chip" href="#referencias">
+      <span class="chip-dot" style="background:#60a5fa"></span>References
+    </a>
+    <a class="chip" href="#scripts">
+      <span class="chip-dot" style="background:#2dd4bf"></span>Scripts
+    </a>
+    <a class="chip" href="#assets">
+      <span class="chip-dot" style="background:#fb923c"></span>Assets
+    </a>
+    <a class="chip" href="#avaliacao">
+      <span class="chip-dot" style="background:#a78bfa"></span>Avaliação
+    </a>
+    <a class="chip" href="#erros">
+      <span class="chip-dot" style="background:#f87171"></span>Erros comuns
+    </a>
+    <a class="chip" href="#loop">
+      <span class="chip-dot" style="background:#34d399"></span>Loop iteração
+    </a>
+  </div>
+</div>
+
+<main>
+
+  <!-- ══ 1. ESTRUTURA ══ -->
+  <section id="estrutura" class="reveal">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Estrutura de uma Skill</h2>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div>
+        <h3 style="margin-bottom:16px">Anatomia completa</h3>
+        <div class="anatomy">
+          <div class="anatomy-header">
+            <span class="dot" style="background:#f87171"></span>
+            <span class="dot" style="background:#fbbf24"></span>
+            <span class="dot" style="background:#34d399"></span>
+            <span style="margin-left:8px">minha-skill/</span>
+          </div>
+          <div class="tree" style="padding:20px 24px">
+            <div><span class="folder">├── SKILL.md</span>          <span class="ann">← obrigatório</span></div>
+            <div><span class="folder">├── references/</span>        <span class="ann">← docs sob demanda</span></div>
+            <div>│   ├── <span class="file">caso-a.md</span></div>
+            <div>│   └── <span class="file">caso-b.md</span></div>
+            <div><span class="folder">├── scripts/</span>           <span class="ann">← código reutilizável</span></div>
+            <div>│   └── <span class="file">validate.py</span></div>
+            <div><span class="folder">└── assets/</span>            <span class="ann">← templates, fontes</span></div>
+            <div>    └── <span class="file">template.md</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:16px">Os 3 níveis de carregamento</h3>
+        <div class="levels" style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div class="level">
+            <div class="level-bar" style="background:var(--accent)"></div>
+            <div class="level-content">
+              <div class="level-title"><span class="badge badge-level">Nível 1</span> Metadados</div>
+              <div class="level-desc">Só <code>name</code> + <code>description</code>. Sempre no contexto. Custo fixo de ~30–100 tokens por skill por prompt.</div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-bar" style="background:var(--blue)"></div>
+            <div class="level-content">
+              <div class="level-title"><span class="badge badge-tip">Nível 2</span> Corpo do SKILL.md</div>
+              <div class="level-desc">Carregado só quando a skill dispara. Mantenha abaixo de 500 linhas / 5.000 tokens. Detalhes vão para references/.</div>
+            </div>
+          </div>
+          <div class="level">
+            <div class="level-bar" style="background:var(--teal)"></div>
+            <div class="level-content">
+              <div class="level-title"><span class="badge badge-do">Nível 3</span> Recursos externos</div>
+              <div class="level-desc">Scripts rodam sem ser lidos. References entram no contexto apenas quando o SKILL.md instrui explicitamente.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemplo: SKILL.md -->
+    <h3 style="margin-bottom:12px">Exemplo completo — SKILL.md</h3>
+    <div class="skill-example">
+      <div class="skill-example-header">
+        <span class="skill-name">ga4-tagging/SKILL.md</span>
+        <span class="badge badge-level">Nível 1 + 2</span>
+      </div>
+      <pre><code><span class="comment">---</span>
+<span class="key">name</span>: <span class="str">ga4-tagging</span>
+<span class="key">description</span>: <span class="str">Use para tudo relacionado a tagueamento GA4 — estrutura</span>
+<span class="str">  de dataLayer, eventos personalizados, GTM e tracking plan.</span>
+<span class="str">  Use sempre que o usuário mencionar GA4, GTM, dataLayer,</span>
+<span class="str">  analytics, tracking ou tagueamento, mesmo sem citar "skill".</span>
+<span class="comment">---</span>
+
+<span class="kw"># GA4 Tagging</span>
+
+<span class="comment">## Quando usar cada referência</span>
+- Padrões de dataLayer → leia <span class="str">references/data-layer.md</span>
+- Schema de eventos     → leia <span class="str">references/event-schema.md</span>
+- Nomear eventos        → leia <span class="str">references/naming.md</span>
+- Validar antes entregar→ rode <span class="str">scripts/validate.py</span>
+
+<span class="comment">## Fluxo: Criação de Eventos</span>
+1. Receber contexto (qual ação rastrear)
+2. Verificar se é evento recomendado ou customizado
+3. Nomear corretamente (snake_case, máx 40 chars)
+4. Gerar código + documentar no tracking plan
+5. Validar com scripts/validate.py
+
+<span class="comment">## Gotchas</span>
+- Eventos customizados: padrão <span class="str">objeto_acao</span> (ex: <span class="str">menu_click</span>)
+- Parâmetros: máx 100 chars de valor string
+- Nunca usar camelCase — GA4 é case-sensitive</code></pre>
+    </div>
+  </section>
+
+  <!-- ══ 2. DESCRIPTION ══ -->
+  <section id="description" class="reveal">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Description — o gatilho</h2>
+    </div>
+
+    <div class="highlight">
+      <strong>A description é a parte mais crítica de qualquer skill.</strong> O Claude decide se usa a skill baseado <em>apenas</em> no name + description. Ela carrega 100% da responsabilidade de acionamento — tudo que não está aqui é invisível para o sistema de seleção.
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card card-red">
+        <div class="card-label" style="color:var(--red)">❌ Fraca</div>
+        <pre style="margin:0;font-size:12px;background:transparent;border:none;padding:0"><code>description: Cria relatórios financeiros.</code></pre>
+        <p style="margin-top:12px">Sem contexto de quando usar. Sem palavras-chave. Nunca vai disparar em prompts reais.</p>
+      </div>
+      <div class="card card-green">
+        <div class="card-label" style="color:var(--green)">✓ Forte</div>
+        <pre style="margin:0;font-size:12px;background:transparent;border:none;padding:0"><code>description: >
+  Cria relatórios financeiros. Use sempre
+  que o usuário mencionar margens, receita,
+  planilhas de custo, dashboards de vendas
+  ou quiser visualizar dados de performance
+  — mesmo sem pedir explicitamente um
+  "relatório".</code></pre>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-label"><span style="color:var(--accent)">01</span> Use imperativo</div>
+        <p>Escreva "Use esta skill quando…" em vez de "Esta skill faz…". O Claude está decidindo se deve agir — diga a ele quando agir.</p>
+      </div>
+      <div class="card">
+        <div class="card-label"><span style="color:var(--pink)">02</span> Foque na intenção</div>
+        <p>Descreva o que o usuário quer alcançar, não os detalhes internos da skill. O Claude faz matching pela intenção do prompt.</p>
+      </div>
+      <div class="card">
+        <div class="card-label"><span style="color:var(--teal)">03</span> Seja "agressivo"</div>
+        <p>Liste contextos onde a skill se aplica, incluindo casos onde o usuário não cita o domínio diretamente. O Claude subtrigger por padrão.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-label"><span class="badge badge-warn">Limite</span> Máximo 1024 caracteres</div>
+      <p>A especificação oficial impõe um limite rígido de 1024 chars na description. Descriptions crescem durante a otimização — monitore o tamanho. Conciso e específico supera longo e genérico.</p>
+    </div>
+  </section>
+
+  <!-- ══ 3. TOKENS ══ -->
+  <section id="tokens" class="reveal">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Gerenciando Tokens</h2>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <h3 style="margin-bottom:20px">Custo fixo por número de skills</h3>
+        <div class="token-row">
+          <span class="token-label">5–10 skills</span>
+          <div class="token-track"><div class="token-fill" style="width:8%;background:var(--green)"></div></div>
+          <span class="token-val">~500–1k</span>
+        </div>
+        <div class="token-row">
+          <span class="token-label">20–30 skills</span>
+          <div class="token-track"><div class="token-fill" style="width:28%;background:var(--amber)"></div></div>
+          <span class="token-val">~2k–4k</span>
+        </div>
+        <div class="token-row">
+          <span class="token-label">50+ skills</span>
+          <div class="token-track"><div class="token-fill" style="width:60%;background:var(--red)"></div></div>
+          <span class="token-val">~5k–10k</span>
+        </div>
+        <div class="token-row">
+          <span class="token-label">Contexto total</span>
+          <div class="token-track"><div class="token-fill" style="width:100%;background:var(--accent)"></div></div>
+          <span class="token-val">200k</span>
+        </div>
+        <p style="color:var(--muted);font-size:13px;margin-top:16px">10 skills bem escritas = menos de 0,5% do contexto disponível. O gargalo real é qualidade, não quantidade.</p>
+      </div>
+      <div>
+        <h3 style="margin-bottom:16px">Como economizar tokens</h3>
+        <ul class="checklist">
+          <li>
+            <span class="check-icon" style="background:rgba(52,211,153,0.15);color:var(--green)">✓</span>
+            <span><strong style="color:var(--text);display:block;font-size:13px">Descriptions curtas e precisas</strong>2–4 frases. Cada palavra extra é custo fixo em todo prompt.</span>
+          </li>
+          <li>
+            <span class="check-icon" style="background:rgba(52,211,153,0.15);color:var(--green)">✓</span>
+            <span><strong style="color:var(--text);display:block;font-size:13px">Mover detalhes para references/</strong>Tudo raramente necessário sai do SKILL.md e carrega sob demanda.</span>
+          </li>
+          <li>
+            <span class="check-icon" style="background:rgba(52,211,153,0.15);color:var(--green)">✓</span>
+            <span><strong style="color:var(--text);display:block;font-size:13px">Scripts que rodam sem ser lidos</strong>Código em scripts/ é executado sem entrar no contexto — zero tokens.</span>
+          </li>
+          <li>
+            <span class="check-icon" style="background:rgba(52,211,153,0.15);color:var(--green)">✓</span>
+            <span><strong style="color:var(--text);display:block;font-size:13px">Consolidar skills redundantes</strong>Duas skills parecidas = dobro do custo fixo + ambiguidade no gatilho.</span>
+          </li>
+          <li>
+            <span class="check-icon" style="background:rgba(52,211,153,0.15);color:var(--green)">✓</span>
+            <span><strong style="color:var(--text);display:block;font-size:13px">Adicionar só o que o agente não sabe</strong>Não explique HTTP, PDFs, ou conceitos básicos. O agente já sabe. Foque no específico do seu domínio.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 4. ESCRITA ══ -->
+  <section id="escrita" class="reveal">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Boas Práticas de Escrita</h2>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="compare compare-do">
+        <div class="compare-col">
+          <h3 style="color:var(--green)">✓ Faça</h3>
+          <div class="compare-item">Explique o porquê das instruções, não só o quê</div>
+          <div class="compare-item">Use imperativo: "Identifique", "Gere", "Valide"</div>
+          <div class="compare-item">Inclua exemplos concretos Input → Output</div>
+          <div class="compare-item">Dê um default claro quando há opções</div>
+          <div class="compare-item">Adicione seção de Gotchas com pegadinhas específicas</div>
+          <div class="compare-item">Instrua quando ler cada reference explicitamente</div>
+        </div>
+      </div>
+      <div class="compare compare-dont" style="border:none;border-left:1px solid var(--border)">
+        <div class="compare-col">
+          <h3 style="color:var(--red)">✗ Evite</h3>
+          <div class="compare-item">Usar SEMPRE/NUNCA em caps sem explicação</div>
+          <div class="compare-item">Instruções ultra-específicas que só funcionam para 1 caso</div>
+          <div class="compare-item">Menus de opções sem default: "use pypdf, pdfplumber ou PyMuPDF…"</div>
+          <div class="compare-item">Explicar o óbvio que o agente já sabe</div>
+          <div class="compare-item">SKILL.md com mais de 500 linhas</div>
+          <div class="compare-item">Só testar 1 prompt e assumir que funciona</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card card-accent">
+        <div class="card-label" style="color:var(--accent)">Explique o porquê</div>
+        <pre style="background:transparent;border:none;padding:0;margin:0;font-size:12px"><code><span class="comment">❌ SEMPRE inicie pelo sumário.</span>
+
+<span class="str">✓ Inicie pelo sumário porque o usuário</span>
+<span class="str">  geralmente lê só a primeira página —</span>
+<span class="str">  ela precisa ser autoexplicativa.</span></code></pre>
+      </div>
+      <div class="card card-teal">
+        <div class="card-label" style="color:var(--teal)">Default, não menu</div>
+        <pre style="background:transparent;border:none;padding:0;margin:0;font-size:12px"><code><span class="comment">❌ Use pypdf, pdfplumber ou PyMuPDF...</span>
+
+<span class="str">✓ Use pdfplumber para extração de texto.</span>
+<span class="str">  Para PDFs escaneados, use pdf2image</span>
+<span class="str">  com pytesseract como fallback.</span></code></pre>
+      </div>
+      <div class="card card-green">
+        <div class="card-label" style="color:var(--green)">Procedimento vs declaração</div>
+        <pre style="background:transparent;border:none;padding:0;margin:0;font-size:12px"><code><span class="comment">❌ Faça JOIN de orders em customers.</span>
+
+<span class="str">✓ 1. Leia o schema de references/</span>
+<span class="str">  2. Use a convenção _id para joins</span>
+<span class="str">  3. Aplique filtros como WHERE</span>
+<span class="str">  4. Formate como tabela markdown</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5. REFERENCES ══ -->
+  <section id="referencias" class="reveal">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>References — documentação sob demanda</h2>
+    </div>
+
+    <p style="color:var(--muted);margin-bottom:24px;max-width:680px">References são arquivos de apoio que o Claude lê <em>somente quando necessário</em>. Mantêm o SKILL.md enxuto e os tokens sob controle.</p>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div>
+        <h3 style="margin-bottom:12px">Quando criar um reference</h3>
+        <ul class="checklist">
+          <li><span class="check-icon" style="background:rgba(96,165,250,0.15);color:var(--blue)">→</span><span>Documentação técnica detalhada (APIs, schemas, padrões)</span></li>
+          <li><span class="check-icon" style="background:rgba(96,165,250,0.15);color:var(--blue)">→</span><span>Conteúdo necessário apenas em cenários específicos</span></li>
+          <li><span class="check-icon" style="background:rgba(96,165,250,0.15);color:var(--blue)">→</span><span>Múltiplos domínios/frameworks (aws.md, gcp.md, azure.md)</span></li>
+          <li><span class="check-icon" style="background:rgba(96,165,250,0.15);color:var(--blue)">→</span><span>Quando o SKILL.md está se aproximando de 500 linhas</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-bottom:12px">Como referenciar corretamente</h3>
+        <pre><code><span class="comment">## Quando usar cada reference</span>
+
+<span class="comment"># ✓ Específico — o Claude sabe quando carregar</span>
+- Se a API retornar erro não-200 →
+  leia <span class="str">references/api-errors.md</span>
+- Para nomear eventos →
+  leia <span class="str">references/naming.md</span>
+
+<span class="comment"># ✗ Genérico — inútil</span>
+- Veja references/ para detalhes.</code></pre>
+      </div>
+    </div>
+
+    <!-- Exemplo reference -->
+    <div class="skill-example">
+      <div class="skill-example-header">
+        <span class="skill-name">ga4-tagging/references/event-schema.md</span>
+        <span class="badge badge-tip">Nível 3</span>
+      </div>
+      <pre><code><span class="kw"># Schema de Eventos GA4</span>
+
+<span class="comment">## Índice</span>
+1. Eventos recomendados pelo Google
+2. Eventos customizados
+3. Parâmetros globais obrigatórios
+
+<span class="comment">## 1. Eventos recomendados (use sempre que possível)</span>
+| Evento        | Quando usar          | Parâmetros obrigatórios         |
+|---------------|----------------------|---------------------------------|
+| purchase      | Finalização compra   | transaction_id, value, currency |
+| add_to_cart   | Adicionar carrinho   | item_id, item_name, value       |
+| login         | Login usuário        | method                          |
+
+<span class="comment">## 2. Eventos customizados</span>
+Use quando não há equivalente recomendado.
+Padrão: <span class="str">{objeto}_{acao}</span> → banner_click, form_submit, video_play
+
+<span class="comment">## 3. Parâmetros globais (incluir em todos)</span>
+- event_category  → agrupamento lógico
+- page_location   → URL atual
+- user_logged_in  → boolean</code></pre>
+    </div>
+
+    <div class="highlight" style="margin-top:16px">
+      <strong>References com mais de 300 linhas</strong> precisam de um índice no topo para o Claude saber onde procurar sem ler tudo.
+    </div>
+  </section>
+
+  <!-- ══ 6. SCRIPTS ══ -->
+  <section id="scripts" class="reveal">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Scripts — código reutilizável</h2>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card card-teal">
+        <div class="card-label" style="color:var(--teal)">Quando criar um script</div>
+        <p>Se em vários testes o Claude escreve o mesmo helper script independentemente, esse código deve ir para <code>scripts/</code>. Escreva uma vez, use em todas as execuções — economiza tokens e tempo.</p>
+      </div>
+      <div class="card card-amber">
+        <div class="card-label" style="color:var(--amber)">Scripts rodam sem ser lidos</div>
+        <p>O agente executa scripts com um comando — sem carregar o código no contexto. Dependências declaradas inline com <code>uv run</code> são instaladas automaticamente.</p>
+      </div>
+    </div>
+
+    <!-- 4 regras de ouro -->
+    <h3 style="margin-bottom:16px">4 regras de ouro para scripts agenticos</h3>
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="card card-red">
+        <div class="card-label" style="color:var(--red)">⚠ Sem prompts interativos</div>
+        <pre style="background:transparent;border:none;padding:0;margin-top:8px;font-size:12px"><code><span class="comment"># Agentes não podem responder prompts</span>
+<span class="comment"># ✗ RUIM: trava indefinidamente</span>
+Target environment: _
+
+<span class="comment"># ✓ BOM: erro claro com orientação</span>
+<span class="fn">Error</span>: --env é obrigatório.
+<span class="fn">Opções</span>: development, staging, production
+<span class="fn">Usage</span>: python deploy.py --env staging</code></pre>
+      </div>
+      <div class="card card-blue">
+        <div class="card-label" style="color:var(--blue)">📋 --help bem documentado</div>
+        <pre style="background:transparent;border:none;padding:0;margin-top:8px;font-size:12px"><code><span class="comment"># --help é como o agente aprende</span>
+<span class="comment"># a interface do seu script</span>
+<span class="fn">Usage</span>: validate.py [OPTIONS] INPUT
+
+<span class="fn">Options</span>:
+  --format FORMAT  json, csv, table
+  --output FILE    salvar em arquivo
+  --verbose        log no stderr
+
+<span class="fn">Examples</span>:
+  validate.py data.csv
+  validate.py --format csv out.csv</code></pre>
+      </div>
+      <div class="card card-green">
+        <div class="card-label" style="color:var(--green)">📊 Output estruturado</div>
+        <pre style="background:transparent;border:none;padding:0;margin-top:8px;font-size:12px"><code><span class="comment"># ✗ Difícil de parsear</span>
+NAME       STATUS   CREATED
+my-service running  2025-01
+
+<span class="comment"># ✓ JSON — consumível pelo agente</span>
+{<span class="str">"name"</span>: <span class="str">"my-service"</span>,
+ <span class="str">"status"</span>: <span class="str">"running"</span>,
+ <span class="str">"created"</span>: <span class="str">"2025-01-15"</span>}
+
+<span class="comment"># Dados → stdout</span>
+<span class="comment"># Diagnósticos → stderr</span></code></pre>
+      </div>
+      <div class="card card-accent">
+        <div class="card-label" style="color:var(--accent)">🔁 Idempotente + --dry-run</div>
+        <pre style="background:transparent;border:none;padding:0;margin-top:8px;font-size:12px"><code><span class="comment"># Agentes podem repetir comandos</span>
+<span class="comment"># "crie se não existir" > "crie e falhe"</span>
+
+<span class="comment"># Para operações destrutivas:</span>
+python deploy.py --dry-run
+<span class="comment"># Mostra o que vai acontecer</span>
+<span class="comment"># sem executar de fato</span>
+
+<span class="comment"># Exit codes distintos por tipo de erro:</span>
+<span class="comment"># 1=not found, 2=invalid args, 3=auth</span></code></pre>
+      </div>
+    </div>
+
+    <!-- Exemplo script com deps inline -->
+    <h3 style="margin-bottom:12px">Exemplo: script com dependências inline (PEP 723)</h3>
+    <div class="skill-example">
+      <div class="skill-example-header">
+        <span class="skill-name">ga4-tagging/scripts/validate_events.py</span>
+        <span class="badge badge-tip">uv run scripts/validate_events.py events.json</span>
+      </div>
+      <pre><code><span class="comment"># /// script</span>
+<span class="comment"># dependencies = [</span>
+<span class="comment">#   "jsonschema>=4.0",</span>
+<span class="comment">#   "rich>=13.0",</span>
+<span class="comment"># ]</span>
+<span class="comment"># ///</span>
+
+<span class="kw">import</span> json, sys
+<span class="kw">from</span> jsonschema <span class="kw">import</span> validate
+
+<span class="comment"># Sem prompts interativos — tudo via args</span>
+<span class="kw">if</span> len(sys.argv) < <span class="num">2</span>:
+    print(<span class="str">"Error: arquivo JSON obrigatório"</span>, file=sys.stderr)
+    print(<span class="str">"Usage: validate_events.py events.json"</span>, file=sys.stderr)
+    sys.exit(<span class="num">2</span>)
+
+<span class="kw">with</span> open(sys.argv[<span class="num">1</span>]) <span class="kw">as</span> f:
+    events = json.load(f)
+
+errors = []
+<span class="kw">for</span> ev <span class="kw">in</span> events:
+    <span class="kw">if</span> <span class="str">"event"</span> <span class="kw">not in</span> ev:
+        errors.append({<span class="str">"event"</span>: ev, <span class="str">"error"</span>: <span class="str">"campo 'event' obrigatório"</span>})
+    <span class="kw">elif</span> len(ev[<span class="str">"event"</span>]) > <span class="num">40</span>:
+        errors.append({<span class="str">"event"</span>: ev[<span class="str">"event"</span>], <span class="str">"error"</span>: <span class="str">"nome > 40 chars"</span>})
+
+<span class="comment"># Dados estruturados → stdout</span>
+print(json.dumps({<span class="str">"valid"</span>: len(errors) == <span class="num">0</span>, <span class="str">"errors"</span>: errors}, indent=<span class="num">2</span>))
+sys.exit(<span class="num">0</span> <span class="kw">if</span> <span class="kw">not</span> errors <span class="kw">else</span> <span class="num">1</span>)</code></pre>
+    </div>
+
+    <div class="highlight" style="margin-top:16px">
+      <strong>Cuidado com output grande:</strong> muitos harnesses truncam automaticamente output além de 10–30K caracteres. Se seu script pode produzir output grande, suporte flags como <code>--offset</code> ou <code>--output arquivo.json</code> para que o agente possa controlar o tamanho.
+    </div>
+  </section>
+
+  <!-- ══ 7. ASSETS ══ -->
+  <section id="assets" class="reveal">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2>Assets — templates e recursos</h2>
+    </div>
+
+    <p style="color:var(--muted);margin-bottom:24px;max-width:680px">Assets são arquivos usados na produção do output final — templates de documentos, fontes, ícones, planilhas base. Diferente de references (para o Claude ler) e scripts (para executar), assets são <em>inputs</em> para o trabalho.</p>
+
+    <div class="grid-3" style="margin-bottom:24px">
+      <div class="card">
+        <div class="card-label"><span style="color:var(--amber)">📄</span> Templates de output</div>
+        <p>Estruturas fixas que o output deve seguir. Armazene em assets/ e instrua o Claude a usá-las como base. Mais confiável que descrever o formato em prosa.</p>
+      </div>
+      <div class="card">
+        <div class="card-label"><span style="color:var(--pink)">🎨</span> Recursos visuais</div>
+        <p>Fontes, ícones, logos, paletas de cores. Especialmente úteis para skills de geração de apresentações ou documentos com identidade visual.</p>
+      </div>
+      <div class="card">
+        <div class="card-label"><span style="color:var(--teal)">📊</span> Planilhas e schemas</div>
+        <p>Arquivos CSV, JSON ou YAML que servem como fonte da verdade para validações ou como estrutura base para output.</p>
+      </div>
+    </div>
+
+    <!-- Exemplo com asset -->
+    <h3 style="margin-bottom:12px">Exemplo: asset de template referenciado no SKILL.md</h3>
+    <div class="skill-example">
+      <div class="skill-example-header">
+        <span class="skill-name">ga4-tagging/assets/tracking-plan-template.md</span>
+        <span class="badge badge-warn">template</span>
+      </div>
+      <div class="skill-tabs">
+        <div class="skill-tab active" onclick="switchTab(this,'asset-template')">assets/template.md</div>
+        <div class="skill-tab" onclick="switchTab(this,'asset-skill')">Como referenciar no SKILL.md</div>
+      </div>
+      <div id="asset-template" class="skill-tab-content active">
+        <pre><code><span class="kw"># Tracking Plan — [Nome do Projeto]</span>
+
+<span class="comment">## Visão Geral</span>
+- **Projeto**: [nome]
+- **Data**: [data]
+- **Responsável**: [nome]
+
+<span class="comment">## Eventos Implementados</span>
+| Evento | Categoria | Descrição | Parâmetros | Status |
+|--------|-----------|-----------|------------|--------|
+| [event_name] | [cat] | [desc] | [params] | 🟡 Pendente |
+
+<span class="comment">## Estrutura do dataLayer</span>
+```javascript
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: '[event_name]',
+  // parâmetros específicos aqui
+});
+```</code></pre>
+      </div>
+      <div id="asset-skill" class="skill-tab-content">
+        <pre><code><span class="comment">## Output esperado</span>
+
+Ao finalizar, gere o tracking plan usando o template em
+<span class="str">assets/tracking-plan-template.md</span> como base.
+
+Substitua todos os placeholders entre colchetes.
+Adicione uma linha na tabela para cada evento implementado.
+Mantenha o bloco de dataLayer com o código real gerado.</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 8. AVALIAÇÃO ══ -->
+  <section id="avaliacao" class="reveal">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2>Avaliando sua Skill</h2>
+    </div>
+
+    <div class="highlight">
+      <strong>Sempre compare with skill vs. without skill.</strong> Uma skill que melhora o pass rate em 50pp mas triplica tokens é um trade-off diferente de uma que é igualmente melhor e mais barata. O benchmark.json revela esse custo-benefício real.
+    </div>
+
+    <div class="grid-2" style="margin-bottom:24px">
+      <div>
+        <h3 style="margin-bottom:16px">Estrutura de workspace</h3>
+        <div class="anatomy">
+          <div class="anatomy-header">
+            <span class="dot" style="background:#f87171"></span>
+            <span class="dot" style="background:#fbbf24"></span>
+            <span class="dot" style="background:#34d399"></span>
+            minha-skill-workspace/
+          </div>
+          <div class="tree" style="padding:16px 20px">
+            <div><span class="folder">└── iteration-1/</span></div>
+            <div>    <span class="folder">├── eval-caso-a/</span></div>
+            <div>    │   <span class="folder">├── with_skill/</span></div>
+            <div>    │   │   ├── <span class="file">outputs/</span></div>
+            <div>    │   │   ├── <span class="file">timing.json</span>    <span class="ann">← tokens + ms</span></div>
+            <div>    │   │   └── <span class="file">grading.json</span>  <span class="ann">← assertions</span></div>
+            <div>    │   └── <span class="folder">without_skill/</span></div>
+            <div>    │       └── <span class="file">outputs/</span></div>
+            <div>    └── <span class="file">benchmark.json</span>       <span class="ann">← delta final</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:16px">Boas assertions vs ruins</h3>
+        <div class="card card-green" style="margin-bottom:10px">
+          <div class="card-label" style="color:var(--green)">✓ Boas assertions</div>
+          <p>"O arquivo de saída é JSON válido"<br>"O gráfico tem eixos com rótulo"<br>"O relatório tem pelo menos 3 recomendações"</p>
+        </div>
+        <div class="card card-red">
+          <div class="card-label" style="color:var(--red)">✗ Ruins</div>
+          <p>"O output é bom" — vago demais<br>"Usa exatamente a frase X" — frágil demais<br>Assertions que sempre passam nos dois lados — inúteis</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:16px">O que o benchmark.json revela</h3>
+    <pre><code>{
+  <span class="key">"run_summary"</span>: {
+    <span class="key">"with_skill"</span>:    { <span class="key">"pass_rate"</span>: { <span class="key">"mean"</span>: <span class="num">0.83</span> }, <span class="key">"tokens"</span>: { <span class="key">"mean"</span>: <span class="num">3800</span> } },
+    <span class="key">"without_skill"</span>: { <span class="key">"pass_rate"</span>: { <span class="key">"mean"</span>: <span class="num">0.33</span> }, <span class="key">"tokens"</span>: { <span class="key">"mean"</span>: <span class="num">2100</span> } },
+    <span class="key">"delta"</span>: {
+      <span class="key">"pass_rate"</span>: <span class="num">+0.50</span>,   <span class="comment">// ← skill melhorou 50pp = vale a pena</span>
+      <span class="key">"tokens"</span>:    <span class="num">+1700</span>    <span class="comment">// ← custo de 1700 tokens extras por run</span>
+    }
+  }
+}</code></pre>
+  </section>
+
+  <!-- ══ 9. ERROS COMUNS ══ -->
+  <section id="erros" class="reveal">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2>Erros Comuns — Gotchas</h2>
+    </div>
+
+    <ul class="gotcha-list">
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Description vaga sem palavras-chave de contexto</strong>
+          <span>Sem keywords específicas, o Claude não sabe quando usar a skill. O sistema tende a undertrigger — a description precisa ser explicitamente "agressiva".</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>SKILL.md com 1000+ linhas</strong>
+          <span>Todo o corpo entra no contexto a cada uso. Conteúdo que deveria estar em references/ vira custo fixo desnecessário em todo prompt.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Usar SEMPRE/NUNCA em caps sem explicar o porquê</strong>
+          <span>Yellow flag. O Claude segue melhor raciocínio do que ordens brutas. Reescreva explicando a lógica por trás da restrição.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Skill criada sem contexto de domínio real</strong>
+          <span>Pedir ao LLM para gerar uma skill sem material específico resulta em procedimentos genéricos. Alimente runbooks, specs de API, logs de bugs resolvidos, histórico de code review.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Overfitting para os casos de teste</strong>
+          <span>Skill que só funciona para os 3 prompts testados. Pense em como vai se comportar em 1000 prompts diferentes. Evite patches narrow — generalize.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Scripts que bloqueiam aguardando input</strong>
+          <span>Agentes operam em shells não-interativos. Um script com prompt de confirmação vai travar indefinidamente. Aceite tudo via flags, variáveis de ambiente ou stdin.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Duas skills com descriptions sobrepostas</strong>
+          <span>Quando ambas poderiam disparar para o mesmo prompt, cria ambiguidade no acionamento. Delimite claramente o território de cada uma com exemplos de quando NÃO usar.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Não versionar com iterações separadas</strong>
+          <span>Ao melhorar uma skill, nunca edite o original diretamente antes de ter o baseline salvo. Snapshote a versão anterior para poder comparar o delta real.</span>
+        </div>
+      </li>
+      <li>
+        <span class="gotcha-icon">⚠</span>
+        <div class="gotcha-text">
+          <strong>Scripts com output de texto livre grande</strong>
+          <span>Harnesses truncam output acima de ~10–30K chars silenciosamente. Scripts que podem gerar muito texto precisam suportar --output arquivo ou --offset para paginação.</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ══ 10. LOOP ══ -->
+  <section id="loop" class="reveal">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2>Loop de Iteração</h2>
+    </div>
+
+    <p style="color:var(--muted);margin-bottom:32px;max-width:620px">O loop é o coração do processo. Uma skill boa não é escrita de uma vez — ela é refinada através de execuções reais, avaliação honesta e melhorias focadas.</p>
+
+    <div class="loop">
+      <div class="loop-step">
+        <div class="loop-num">1</div>
+        <div class="loop-body">
+          <div class="loop-title">Rascunho inicial</div>
+          <div class="loop-desc">Escreva o SKILL.md. Antes, complete a tarefa real com o Claude e extraia o padrão. Ou alimente material interno: runbooks, specs de API, code reviews, bugs resolvidos.</div>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">2</div>
+        <div class="loop-body">
+          <div class="loop-title">Crie 2–3 casos de teste realistas</div>
+          <div class="loop-desc">Prompts que um usuário real digitaria. Varie formalidade, detalhe, e explicitness. Inclua pelo menos um edge case. Salve em <code>evals/evals.json</code>.</div>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">3</div>
+        <div class="loop-body">
+          <div class="loop-title">Rode: with skill + without skill</div>
+          <div class="loop-desc">Execute cada caso duas vezes — uma com a skill, uma sem. Contextos limpos e separados. O resultado sem skill é o baseline de comparação.</div>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">4</div>
+        <div class="loop-body">
+          <div class="loop-title">Avalie os outputs</div>
+          <div class="loop-desc">Leia os execution traces, não só os resultados finais. Se o agente desperdiçou tempo em passos improdutivos, as instruções estão ambíguas ou excessivas. Grade assertions, colete feedback humano.</div>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">5</div>
+        <div class="loop-body">
+          <div class="loop-title">Melhore — generalize, não patcheie</div>
+          <div class="loop-desc">Corrija o problema subjacente, não o sintoma específico. Se as correções são muito narrow (só funcionam para aquele exemplo), você está overfitting. Adicione gotchas para erros recorrentes. Remova instruções sem pull.</div>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">6</div>
+        <div class="loop-body">
+          <div class="loop-title">Repita em iteration-N+1/</div>
+          <div class="loop-desc">Salve os resultados da nova iteração em um diretório separado. Compare com a iteração anterior. Pare quando o feedback for consistentemente vazio ou o progresso for marginal.</div>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-num">7</div>
+        <div class="loop-body">
+          <div class="loop-title">Otimize a description</div>
+          <div class="loop-desc">Crie ~20 queries de eval (10 should-trigger, 10 should-not-trigger). Teste com train/validation split (60/40). Itere a description com base nos failures do train set — valide no held-out. Limite: 1024 chars.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="rule">
+
+    <div class="card card-accent">
+      <div class="card-label" style="color:var(--accent)">🏁 Critérios de parada</div>
+      <div class="grid-3" style="margin-top:12px">
+        <div style="text-align:center;padding:12px">
+          <div style="font-size:28px;margin-bottom:8px">✓</div>
+          <div style="font-size:13px;color:var(--muted)">Feedback consistentemente vazio — tudo está bom</div>
+        </div>
+        <div style="text-align:center;padding:12px;border-left:1px solid var(--border);border-right:1px solid var(--border)">
+          <div style="font-size:28px;margin-bottom:8px">📊</div>
+          <div style="font-size:13px;color:var(--muted)">Delta de pass rate entre iterações abaixo de 5pp</div>
+        </div>
+        <div style="text-align:center;padding:12px">
+          <div style="font-size:28px;margin-bottom:8px">💬</div>
+          <div style="font-size:13px;color:var(--muted)">Você está satisfeito com os outputs em casos reais</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span>Agent Skills — Guia Completo</span>
+  <span>agentskills.io · anthropic.com</span>
+</footer>
+
+<script>
+  // Chip active state on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const chips = document.querySelectorAll('.chip');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        chips.forEach(c => {
+          c.classList.toggle('active', c.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll
+  chips.forEach(chip => {
+    chip.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(chip.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.05 });
+  reveals.forEach(r => revealObs.observe(r));
+
+  // Tab switching for skill examples
+  function switchTab(tab, contentId) {
+    const wrapper = tab.closest('.skill-example');
+    wrapper.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+    wrapper.querySelectorAll('.skill-tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(contentId).classList.add('active');
+  }
+</script>
+</body>
+</html>
