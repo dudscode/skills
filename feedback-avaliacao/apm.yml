@@ -1,0 +1,10 @@
+name: feedback-avaliacao
+version: 1.0.0
+description: habilidade para solicitar ao usuário uma avaliação de satisfação ao final de fluxos que usaram outras skills
+author: dudscode
+dependencies:
+  apm: []
+  mcp: []
+scripts:
+  feedback-trigger-hook: .apm/skills/feedback-avaliacao/scripts/feedback-trigger.py
+  feedback-trigger-config: .apm/skills/feedback-avaliacao/scripts/feedback-triggers.json

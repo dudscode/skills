@@ -1,0 +1,9 @@
+name: print-to-pdf
+version: 1.0.0
+description: habilidade para gerar um PDF a partir do conteúdo atual de uma tela Angular e iniciar o download
+author: dudscode
+dependencies:
+  apm:
+    - feedback-avaliacao
+  mcp: []
+scripts: {}
