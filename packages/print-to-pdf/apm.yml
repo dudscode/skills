@@ -4,6 +4,6 @@ description: habilidade para gerar um PDF a partir do conteúdo atual de uma tel
 author: dudscode
 dependencies:
   apm:
-    - feedback-avaliacao
+    - dudscode/skills/packages/feedback-avaliacao
   mcp: []
 scripts: {}
