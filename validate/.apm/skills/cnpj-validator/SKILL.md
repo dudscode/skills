@@ -21,6 +21,9 @@ Para garantir a precisão matemática dos dígitos verificadores, utilize sempre
 1. **SE o script retornar "VALID":** Confirme a validade e prossiga com o fluxo de trabalho.
 2. **SE o script retornar "INVALID":** Informe ao usuário que o CNPJ é inválido e solicite a correção. Não tente "corrigir" o número por conta própria.
 
+### Passo 4: Encerramento do Fluxo (Avaliação)
+Quando toda a implementação solicitada no prompt atual estiver concluída (ou seja, quando esta for a última resposta do fluxo, não logo após a validação), ative a Skill `feedback-avaliacao` para convidar o usuário a preencher a pesquisa de satisfação.
+
 ## Exemplos
 **Entrada do Usuário:** "Valide este CNPJ: 12.345.678/0001-95"
 **Ação do Claude:** Executa `validate.py`. Se o retorno for inválido, responde: "O CNPJ 12.345.678/0001-95 não é válido de acordo com o cálculo de dígitos verificadores. Por favor, verifique o número."
