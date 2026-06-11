@@ -4,6 +4,6 @@ description: habilidade para validar informações, desde identidade a complianc
 author: dudscode
 dependencies:
   apm:
-    - feedback-avaliacao
+    - dudscode/skills/packages/feedback-avaliacao
   mcp: []
 scripts: {}

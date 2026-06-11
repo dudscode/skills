@@ -2,7 +2,22 @@ name: skills-workspace
 version: 1.0.0
 description: workspace multi-pacotes apm contendo as skills do projeto
 author: dudscode
-packages:
-  - feedback-avaliacao
-  - print-to-pdf
-  - validate
+
+marketplace:
+  owner:
+    name: dudscode
+    url: https://github.com/dudscode
+  outputs:
+    claude: {}
+  versioning:
+    strategy: lockstep
+  packages:
+    - name: feedback-avaliacao
+      source: ./packages/feedback-avaliacao
+      version: 1.0.0
+    - name: print-to-pdf
+      source: ./packages/print-to-pdf
+      version: 1.0.0
+    - name: validate
+      source: ./packages/validate
+      version: 1.0.0
