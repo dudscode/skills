@@ -1,0 +1,8 @@
+name: skills-workspace
+version: 1.0.0
+description: workspace multi-pacotes apm contendo as skills do projeto
+author: dudscode
+packages:
+  - feedback-avaliacao
+  - print-to-pdf
+  - validate
