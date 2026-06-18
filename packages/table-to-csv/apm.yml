@@ -1,0 +1,9 @@
+name: table-to-csv
+version: 2.0.0
+description: habilidade para exportar dados tabulares de uma tela Angular para CSV ou .xlsx com cabeçalho de marca (logo + título) e iniciar o download
+author: dudscode
+dependencies:
+  apm:
+    - dudscode/skills/packages/feedback-avaliacao
+  mcp: []
+scripts: {}

@@ -18,6 +18,9 @@ marketplace:
     - name: print-to-pdf
       source: ./packages/print-to-pdf
       version: 1.0.0
+    - name: table-to-csv
+      source: ./packages/table-to-csv
+      version: 2.0.0
     - name: validate
       source: ./packages/validate
       version: 1.0.0
