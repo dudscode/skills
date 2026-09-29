@@ -12,6 +12,9 @@ marketplace:
   versioning:
     strategy: lockstep
   packages:
+    - name: estrategista
+      source: ./packages/estrategista
+      version: 1.0.0
     - name: feedback-avaliacao
       source: ./packages/feedback-avaliacao
       version: 1.0.0
