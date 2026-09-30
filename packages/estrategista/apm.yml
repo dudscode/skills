@@ -1,0 +1,9 @@
+name: estrategista
+version: 1.0.0
+description: habilidade de estratégia técnica para quem lidera sem autoridade formal — avalia estratégias, escreve artefatos de decisão, prioriza, prepara reuniões, traduz impacto e treina com cenários
+author: dudscode
+dependencies:
+  apm:
+    - dudscode/skills/packages/feedback-avaliacao
+  mcp: []
+scripts: {}
